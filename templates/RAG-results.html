@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form, render_field %}
+
+{% block title %}RAG result{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 60vh; padding-top: 3rem; padding-bottom: 3rem;">
+    <div class="container mt-5">
+        <h2>Retrieval Augmented Generation (RAG) Based Query System</h2>
+        <div class="container shadow p-4 bg-body-tertiary rounded border border-1">
+            {% include 'deletion-errors-template.html' %}
+            {% if response %}
+                <h2 class="pb-2">Response</h2>
+                    <div class="container text-start p-3">
+                        {{ response|safe }}
+                    </div>
+            {% endif %}
+            {% if sources %}
+                <h2 class="pb-2">Sources</h2>
+                    <div class="container text-start p-3">
+                        <ul>
+                        {% for source in sources %}
+                            {% if source["file_type"] == pdf_extension %}
+                            <li>{{ source["main"] }} - page: {{ source["specific"] }}</li>
+                            {% else %}
+                            <li>{{ source["main"] }}</li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+
+                    </div>
+            {% endif %}
+            {% if context %}
+                <h2 class="pb-2">Context</h2>
+                    <div class="accordion mb-3" id="contextAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="contextHeading">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contextContent" aria-expanded="false" aria-controls="contextContent">
+                                    Show/Hide Context
+                                </button>
+                            </h2>
+                            <div id="contextContent" class="accordion-collapse collapse" aria-labelledby="contextHeading" data-bs-parent="#contextAccordion">
+                                <div class="accordion-body">
+                                    <div class="container text-start p-3">
+                                        <p class="fs-3">These are quotes pulled from the document provided to answer your question</p>
+                                        {% for i, (text, source) in enumerate(zip(context, sources)) %}
+                                            <p class="pb-2 fw-bolder">
+                                                Context {{ i+1 }} from
+                                                {% if source["file_type"] == pdf_extension %}
+                                                {{ source["main"] }} - page: {{ source["specific"] }}
+                                                {% else %}
+                                                {{ source["main"] }}
+                                                {% endif %}
+                                            </p>
+                                            <p class="pb-2">{{ text }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            <hr>
+            <h2 class="pb-2">Another question?</h2>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('rag_action') }}">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    <label for="{{ form.selected_document.id }}" class="form-label">
+                        {{ form.selected_document.label.text }}
+                        <a href="#" class="text-primary small popover-help"
+                           data-bs-toggle="popover"
+                           data-bs-placement="bottom"
+                           data-bs-content="Choose a document to run your question against.">
+                            <i class="bi bi-question-circle-fill tooltip-custom"></i>
+                        </a>
+                    </label>
+                    {{ form.selected_document(class="form-select", id="selected_document") }}
+
+                    <div id="doc-info-wrapper" class="mt-2">
+                        <a href="#" id="doc-info-link" class="small text-primary"
+                           data-bs-toggle="popover"
+                           data-bs-placement="bottom"
+                           data-bs-content="">What is this document about?</a>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.query.id }}" class="form-label">
+                        {{ form.query.label.text }}
+                        <a href="#" class="text-primary small popover-help"
+                           data-bs-toggle="popover"
+                           data-bs-placement="bottom"
+                           data-bs-content="This is the question you want answered based on the document.">
+                           <i class="bi bi-question-circle-fill tooltip-custom"></i>
+                        </a>
+                    </label>
+                    {{ form.query(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.number_of_sources.id }}" class="form-label">
+                        {{ form.number_of_sources.label.text }}
+                        <a href="#" class="text-primary small popover-help"
+                           data-bs-toggle="popover"
+                           data-bs-placement="bottom"
+                           data-bs-content="Set how many sources will be used to answer your question. More for broad questions, less for specific questions.">
+                            <i class="bi bi-question-circle-fill tooltip-custom"></i>
+                        </a>
+                    </label>
+                    {{ form.number_of_sources(class="form-control short-input") }}
+                </div>
+
+                <button type="submit" class="btn btn-primary loading-button-form">
+                    {{ form.submit.label.text }}
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/RAG.js') }}"></script>
+<script>
+    const csrfToken = "{{ csrf_token() }}";
+</script>
+{% endblock %}

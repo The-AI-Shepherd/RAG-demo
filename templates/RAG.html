@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form, render_field %}
+
+{% block title %}RAG setup{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 60vh; padding-top: 3rem; padding-bottom: 3rem;">
+    <div class="container py-3 my-3 shadow-sm bg-body-tertiary rounded">
+        <h2>RAG database creation form</h2>
+        {% include 'deletion-errors-template.html' %}
+        {{ render_form(form) }}
+    </div>
+</div>
+{% endblock %}
