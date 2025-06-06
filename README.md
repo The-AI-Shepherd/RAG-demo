@@ -21,6 +21,6 @@ Watch the full video here: https://www.youtube.com/watch?v=BREQbLiRZFI
 git clone https://github.com/The-AI-Shepherd/RAG-demo.git
 cd rag-demo
 pip install -r requirements.txt
-cp .env  # Add your OpenAI API key
+# Add your OpenAI API key to the .env file
 python app.py
 
