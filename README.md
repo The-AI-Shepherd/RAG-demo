@@ -6,7 +6,7 @@ This is the companion code for my YouTube video where we walk through a basic RA
 Try it live: [https://aishepherd.dev/portfolio/crypto-tracker](https://aishepherd.dev/portfolio/crypto-tracker)
 
 ## 📹 Video
-Watch the full video here: [YouTube link goes here]
+Watch the full video here: https://www.youtube.com/watch?v=BREQbLiRZFI
 
 ## 💡 Features
 - Upload a PDF
