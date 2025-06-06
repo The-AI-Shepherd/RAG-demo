@@ -3,7 +3,7 @@
 This is the companion code for my YouTube video where we walk through a basic RAG pipeline using Python and Flask.
 
 ## 🚀 Demo
-Try it live: [https://aishepherd.dev/portfolio/crypto-tracker](https://aishepherd.dev/portfolio/crypto-tracker)
+Try it live: https://aishepherd.dev/portfolio/RAG/results
 
 ## 📹 Video
 Watch the full video here: https://www.youtube.com/watch?v=BREQbLiRZFI
